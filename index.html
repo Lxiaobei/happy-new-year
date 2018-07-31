@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" type="text/css" href="css/css.css">
+	<script type="text/javascript" src="js/TweenMax.min.js"></script>
     <title>Document</title>
     <style>
         body {
             padding: 0;
             overflow: hidden;
             margin:0;
-		
-	
-	
             }
 canvas {
 	width: 100vw;
@@ -36,7 +35,31 @@ canvas {
 </head>
 <body>
     <div class="top">
-        <img src="./images/1.png" alt="" class="new">
+		<img src="./images/1.png" alt="" class="new">
+		<!-- 音乐  -->
+		<div class="player">
+			<div class="player__bar">
+				<div class="player__album">
+					<div class="player__albumImg active-song" data-author="Khalid" data-song="Location" data data-src="http://jq22com.qiniudn.com/akon.mp3"
+					 style="background-image: url(images/a1.png)"> </div>
+
+					<div class="player__controls">
+
+						<div class="player__play">
+							<svg class="icon play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+								<path d="M51.109 30.335l-36-24A2 2 0 0 0 12 8v48a2.003 2.003 0 0 0 2 2c.388 0 .775-.113 1.109-.336l36-24a2 2 0 0 0 0-3.329z"
+								/>
+							</svg>
+							<svg class="icon pause" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+								<path d="M22.537 8.046h17.791c1.104 0 2.003.898 2.003 1.993v79.912a2.005 2.005 0 0 1-2.003 2.003h-17.79a2.005 2.005 0 0 1-2.003-2.003V10.04c0-1.095.898-1.993 2.002-1.993zM59.672 8.046h17.8c1.095 0 1.993.898 1.993 1.993v79.912a2.003 2.003 0 0 1-1.993 2.003h-17.8a1.997 1.997 0 0 1-1.993-2.003V10.04c0-1.095.889-1.993 1.993-1.993z"
+								/>
+							</svg>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--  -->
         <canvas id="canvas"></canvas>
     </div>
 </body>
@@ -187,5 +210,64 @@ canvas {
 		}
 	}
 })
+//音乐
+$(document).ready(function () {
+			var audioElement = document.createElement('audio');
+			audioElement.setAttribute('src', $('.active-song').attr('data-src'));
+
+			var tl = new TimelineMax();
+			tl.to('.player__albumImg', 3, {
+				rotation: '360deg',
+				repeat: -1,
+				ease: Power0.easeNone
+			}, '-=0.2');
+			tl.pause();
+
+
+
+			if ($('.player').hasClass('play')) {
+				$('.player').removeClass('play');
+				audioElement.pause();
+				TweenMax.to('.player__albumImg', 0.2, {
+					scale: 1,
+					ease: Power0.easeNone
+				})
+				tl.pause();
+			} else {
+				$('.player').addClass('play');
+				audioElement.play();
+				TweenMax.to('.player__albumImg', 0.2, {
+					scale: 1.1,
+					ease: Power0.easeNone
+				})
+				tl.resume();
+			}
+			$('.player__play').click(function () {
+
+				if ($('.player').hasClass('play')) {
+					$('.player').removeClass('play');
+					audioElement.pause();
+					TweenMax.to('.player__albumImg', 0.2, {
+						scale: 1,
+						ease: Power0.easeNone
+					})
+					tl.pause();
+				} else {
+					$('.player').addClass('play');
+					audioElement.play();
+					TweenMax.to('.player__albumImg', 0.2, {
+						scale: 1.1,
+						ease: Power0.easeNone
+					})
+					tl.resume();
+				}
+			})
+
+			function updateInfo() {
+				$('.player__author').text($('.active-song').attr('data-author'));
+				$('.player__song').text($('.active-song').attr('data-song'));
+			}
+			updateInfo();
+		});
 </script>
 </html>
